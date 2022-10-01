@@ -13,6 +13,15 @@ PKG_NAME:=luci-app-adbyby-plus
 PKG_VERSION:=2.0
 PKG_RELEASE:=76
 
+define Package/$(PKG_NAME)/conffiles
+/usr/share/adbyby/adhost.conf
+/usr/share/adbyby/adblack.conf
+/usr/share/adbyby/blockip.conf
+/usr/share/adbyby/adesc.conf
+/usr/share/adbyby/rules.txt
+/usr/share/adbyby/dnsmasq.adblock
+endef
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
