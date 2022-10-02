@@ -1,0 +1,31 @@
+{
+    "luci-app-adbyby-plus": {
+        "description": "Grant UCI access for luci-app-adbyby-plus",
+        "read": {
+            "file": {
+                "/etc/init.d/adbyby": ["exec"],
+                "/usr/share/adbyby/*": ["exec"],
+				"/usr/share/adbyby/*": ["read"],
+				"/usr/share/adbyby/data/*": ["read"],
+                "/tmp/adbyby/*": ["exec"],
+				"/tmp/adbyby/*": ["read"],
+                "/tmp/rules/*": ["read"],
+				"/tmp/data/*": ["read"],
+                "/tmp/adbyby/data/*": ["read"],
+                "/tmp/adbyby.updated": ["read"]
+            },
+            "uci": ["adbyby"]
+        },
+        "write": {
+            "file": {
+                "/usr/share/adbyby/*": ["write"],
+                "/tmp/adbyby/*": ["write"],
+				"/tmp/adbyby/data/*": ["write"],
+                "/tmp/rules/*": ["write"],
+				"/tmp/data/*": ["write"],
+                "/tmp/adbyby.updated": ["write"]
+            },
+            "uci": ["adbyby"]
+        }
+    }
+}
