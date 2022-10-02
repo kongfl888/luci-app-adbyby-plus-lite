@@ -20,7 +20,7 @@ o=s:option(DummyValue,"rule_data",translate("Subscribe 3rd Rules Data"))
 o.rawhtml  = true
 o.template = "adbyby/refresh"
 o.value =rule_count .. " " .. translate("Records")
-o.description = translate("Custom rules for Adbyby, but AdGuardHome / Host / DNSMASQ rules also be supported")
+o.description = translate("Adp rules for Adbyby, but AdGuardHome / Host / DNSMASQ rules also be supported")
 
 o = s:option(Button,"delete",translate("Delete All Subscribe Rules"))
 o.inputstyle = "reset"
