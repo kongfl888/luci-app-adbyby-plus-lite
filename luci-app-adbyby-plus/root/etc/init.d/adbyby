@@ -136,7 +136,7 @@ add_rule()
 	$ipt_n -A ADBYBY -d 240.0.0.0/4 -j RETURN
 	ip_rule
 	if [ $(ipset list music -name -quiet | grep music) ]; then
-	$ipt_n -A ADBYBY -m set --match-set music dst -j RETURN 2>/dev/null
+		$ipt_n -A ADBYBY -m set --match-set music dst -j RETURN 2>/dev/null
 	fi
 	$ipt_n -A ADBYBY -p tcp -j REDIRECT --to-ports $port 2>/dev/null
 	$ipt_n -I PREROUTING -p tcp --dport 80 -j ADBYBY 2>/dev/null
