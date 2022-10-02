@@ -25,6 +25,6 @@ mkdir -p /etc/dnsmasq.d
 
 /etc/init.d/adbyby stop
 /etc/init.d/adbyby enable
-
+chmod 0775 /usr/share/adbyby/*
 rm -f /tmp/luci-indexcache
 exit 0
