@@ -11,6 +11,7 @@ WAN_FILE=/var/etc/dnsmasq-adbyby.d/03-adbyby-ipset.conf
 CRON_FILE=/etc/crontabs/root
 CONFIG=adbyby
 ipt_n="iptables -t nat"
+port="8118"
 
 uci_get_by_name() {
 	local ret=$(uci get $CONFIG.$1.$2 2>/dev/null)
@@ -32,7 +33,6 @@ get_config()
 	config_get_bool enable $1 enable 0
 	config_get_bool cron_mode $1 cron_mode 1
 	config_get wan_mode $1 wan_mode 1
-	#config_get_bool block_ios $1 block_ios 0
 	config_get_bool mem_mode $1 mem_mode 1
 }
 
@@ -76,7 +76,7 @@ ip_rule()
 			$ipt_n -A ADBYBY -s $ip -j RETURN
 			;;
 		global)
-			$ipt_n -A ADBYBY -s $ip -p tcp -j REDIRECT --to-ports 8118
+			$ipt_n -A ADBYBY -s $ip -p tcp -j REDIRECT --to-ports $port
 			$ipt_n -A ADBYBY -s $ip -j RETURN
 			;;
 		esac
@@ -138,7 +138,7 @@ add_rule()
 	if [ $(ipset list music -name -quiet | grep music) ]; then
 	$ipt_n -A ADBYBY -m set --match-set music dst -j RETURN 2>/dev/null
 	fi
-	$ipt_n -A ADBYBY -p tcp -j REDIRECT --to-ports 8118 2>/dev/null
+	$ipt_n -A ADBYBY -p tcp -j REDIRECT --to-ports $port 2>/dev/null
 	$ipt_n -I PREROUTING -p tcp --dport 80 -j ADBYBY 2>/dev/null
 
 	mkdir -p /var/etc
