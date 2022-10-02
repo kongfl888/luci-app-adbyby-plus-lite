@@ -12,7 +12,7 @@ function index()
 	entry({"admin", "services", "adbyby", "advanced"}, cbi("adbyby/advanced"), _("Advance Setting"), 20).leaf = true
 	entry({"admin", "services", "adbyby", "help"}, form("adbyby/help"), _("Plus+ Domain List"), 30).leaf = true
 	entry({"admin", "services", "adbyby", "esc"}, form("adbyby/esc"), _("Bypass Domain List"), 40).leaf = true
-	entry({"admin", "services", "adbyby", "user"}, form("adbyby/user"), _("User-defined Rule"), 70).leaf = true
+	entry({"admin", "services", "adbyby", "user"}, form("adbyby/user"), _("User-defined Rule"), 50).leaf = true
 	
 	entry({"admin", "services", "adbyby", "refresh"}, call("refresh_data"))
 	entry({"admin", "services", "adbyby", "run"}, call("act_status")).leaf = true
