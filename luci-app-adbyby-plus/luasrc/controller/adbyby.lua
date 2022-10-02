@@ -51,33 +51,6 @@ luci.sys.exec("/usr/share/adbyby/rule-update")
 	else
 		retstring ="0"
 	end
-else
-refresh_cmd = "uclient-fetch -q --no-check-certificate -O - 'https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt' > /tmp/adnew.conf"
-sret = luci.sys.call(refresh_cmd .. " 2>/dev/null")
-if sret== 0 then
-	luci.sys.call("/usr/share/adbyby/ad-update")
-	icount = luci.sys.exec("cat /tmp/ad.conf | wc -l")
-	if tonumber(icount)>0 then
-	if nixio.fs.access("/usr/share/adbyby/dnsmasq.adblock") then
-		oldcount = luci.sys.exec("cat /usr/share/adbyby/dnsmasq.adblock | wc -l")
-	else
-		oldcount=0
-	end
-	if tonumber(icount) ~= tonumber(oldcount) then
-		luci.sys.exec("cp -f /tmp/ad.conf /usr/share/adbyby/dnsmasq.adblock")
-		luci.sys.exec("cp -f /tmp/ad.conf /tmp/etc/dnsmasq-adbyby.d/adblock")
-		luci.sys.exec("/etc/init.d/adbyby restart &")
-		retstring=tostring(math.ceil(tonumber(icount)))
-	else
-		retstring ="0"
-	end
-	else
-	retstring ="-1"
-	end
-	luci.sys.exec("rm -f /tmp/ad.conf")
-else
-	retstring ="-1"
-end
 end
 luci.http.prepare_content("application/json")
 luci.http.write_json({ ret=retstring ,retcount=icount})
