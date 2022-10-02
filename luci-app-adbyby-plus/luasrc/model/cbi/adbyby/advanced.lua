@@ -2,8 +2,8 @@
 local SYS  = require "luci.sys"
 
 local rule_count=0
-if nixio.fs.access("/tmp/rules/count.txt") then
-rule_count=nixio.fs.readfile("/tmp/rules/count.txt") or "0"
+if nixio.fs.access("/tmp/adbyby/data/count.txt") then
+rule_count=nixio.fs.readfile("/tmp/adbyby/data/count.txt") or "0"
 end
 
 m = Map("adbyby")
@@ -12,7 +12,8 @@ s = m:section(TypedSection, "adbyby")
 s.anonymous = true
 
 o = s:option(Flag, "cron_mode")
-o.title = translate("Update the rule at 6:10 a.m. every morning and restart adbyby")
+o.title = translate("Auto update rules")
+o.description = translate("Update the rule at 6:10 a.m. every morning and restart adbyby")
 o.default = 0
 o.rmempty = false
 

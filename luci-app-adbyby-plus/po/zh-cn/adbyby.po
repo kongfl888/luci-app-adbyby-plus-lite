@@ -74,6 +74,9 @@ msgstr "IP黑名单"
 msgid "Advance Setting"
 msgstr "高级设置"
 
+msgid "Auto update rules"
+msgstr "规则自动更新"
+
 msgid "Update the rule at 6:10 a.m. every morning and restart adbyby"
 msgstr "每天早上六点十分更新规则并重启"
 

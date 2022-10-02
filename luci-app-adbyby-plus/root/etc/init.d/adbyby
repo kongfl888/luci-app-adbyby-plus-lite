@@ -44,7 +44,7 @@ add_rules()
 	cat $PROG_PATH/adesc.conf | sed -e 's:^:@@||:' >> $DATA_PATH/user.txt
 	[ -s /tmp/rules/adnew.txt ] && cat /tmp/rules/adnew.txt >> $DATA_PATH/user.txt
 	cp -f $PROG_PATH/rules.txt $DATA_PATH/rules.txt
-	[ -s /tmp/rules/count.txt ] && cp -f /tmp/rules/count.txt $DATA_PATH/count.txt
+	[ -s /tmp/adbyby/data/count.txt ] && cp -f /tmp/adbyby/data/count.txt $DATA_PATH/count.txt
 }
 
 

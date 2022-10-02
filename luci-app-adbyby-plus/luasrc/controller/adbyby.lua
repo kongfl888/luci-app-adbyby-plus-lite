@@ -32,7 +32,7 @@ function refresh_data()
 
 	if set == "rule_data" then
 	luci.sys.exec("/usr/share/adbyby/rule-update")
-	icount = nixio.fs.readfile("/tmp/rules/count.txt") or "0"
+	icount = nixio.fs.readfile("/tmp/adbyby/data/count.txt") or "0"
 
 	if tonumber(icount)>0 then
 		luci.sys.exec("/etc/init.d/adbyby restart &")
@@ -43,4 +43,5 @@ function refresh_data()
 
 	luci.http.prepare_content("application/json")
 	luci.http.write_json({ ret=retstring ,retcount=icount})
+end
 end
