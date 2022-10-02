@@ -88,6 +88,7 @@ ip_rule()
 			$ipt_n -A PREROUTING -p tcp --dport 80 -m set --match-set adbyby_wan dst -j ADBYBY
 			;;
 		2)
+			echo "Cell ADBYBY is ready, pull in!"
 			;;
 	esac
 }
