@@ -113,8 +113,8 @@ msgstr "清空所有订阅的规则库"
 msgid "Anti-AD Rules Subscribe"
 msgstr "广告过滤规则订阅URL"
 
-msgid "AdGuardHome / Host / DNSMASQ rules auto-convert"
-msgstr "AdGuardHome / Host / DNSMASQ 规则自动识别"
+msgid "Custom rules for Adbyby, but AdGuardHome / Host / DNSMASQ rules also be supported"
+msgstr "第三方Adbyby规则，但AdGuardHome / Host / DNSMASQ 规则也能识别"
 
 msgid "Manually force update<br />Adblock Plus Host List"
 msgstr "手动强制更新<br />Adblock Plus Host List"
