@@ -61,10 +61,6 @@ del_cron()
 
 ip_rule()
 {
-
-  ipset -N adbyby_esc hash:ip
-  $ipt_n -A ADBYBY -m set --match-set adbyby_esc dst -j RETURN
-
   local icount=$(uci show adbyby | grep 'filter_mode' | wc -l)
   let icount=icount-1
 	for i in $(seq 0 $icount)
@@ -76,21 +72,22 @@ ip_rule()
 			$ipt_n -A ADBYBY -s $ip -j RETURN
 			;;
 		global)
-			$ipt_n -A ADBYBY -s $ip -p tcp -j REDIRECT --to-ports $port
-			$ipt_n -A ADBYBY -s $ip -j RETURN
+			$ipt_n -I PREROUTING -s $ip -p tcp -j ADBYBY 2>/dev/null
 			;;
 		esac
 	done
 
 	case $wan_mode in
 		0)
+			ipset -N adbyby_esc hash:ip
+			$ipt_n -I PREROUTING -p tcp --dport 80 -j ADBYBY 2>/dev/null
+			$ipt_n -A ADBYBY -m set --match-set adbyby_esc dst -j RETURN
 			;;
 		1)
 			ipset -N adbyby_wan hash:ip
-			$ipt_n -A ADBYBY -m set ! --match-set adbyby_wan dst -j RETURN
+			$ipt_n -A PREROUTING -p tcp --dport 80 -m set --match-set adbyby_wan dst -j ADBYBY
 			;;
 		2)
-			$ipt_n -A ADBYBY -j RETURN
 			;;
 	esac
 }
@@ -100,7 +97,7 @@ add_dns()
 	mkdir -p /var/etc/dnsmasq-adbyby.d
 	mkdir -p /tmp/dnsmasq.d
 
-	awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_esc"'\n",$0)}' $PROG_PATH/adesc.conf > /var/etc/dnsmasq-adbyby.d/06-dnsmasq.esc
+	[ $wan_mode -eq 0 ] && awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_esc"'\n",$0)}' $PROG_PATH/adesc.conf > /var/etc/dnsmasq-adbyby.d/06-dnsmasq.esc
 
 	echo 'conf-dir=/var/etc/dnsmasq-adbyby.d' > /tmp/dnsmasq.d/dnsmasq-adbyby.conf
 
@@ -111,7 +108,7 @@ add_dns()
 			mkdir -p /tmp/dnsmasq.d
 		fi
 	fi
-	
+
 	mkdir -p /tmp/adbyby/rules/data /tmp/adbyby/rules/host
 }
 
@@ -134,12 +131,11 @@ add_rule()
 	$ipt_n -A ADBYBY -d 192.168.0.0/16 -j RETURN
 	$ipt_n -A ADBYBY -d 224.0.0.0/4 -j RETURN
 	$ipt_n -A ADBYBY -d 240.0.0.0/4 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -j REDIRECT --to-ports $port 2>/dev/null
 	ip_rule
 	if [ $(ipset list music -name -quiet | grep music) ]; then
 		$ipt_n -A ADBYBY -m set --match-set music dst -j RETURN 2>/dev/null
 	fi
-	$ipt_n -A ADBYBY -p tcp -j REDIRECT --to-ports $port 2>/dev/null
-	$ipt_n -I PREROUTING -p tcp --dport 80 -j ADBYBY 2>/dev/null
 
 	mkdir -p /var/etc
 	echo -e "/etc/init.d/adbyby restart" > "/var/etc/adbyby.include"
