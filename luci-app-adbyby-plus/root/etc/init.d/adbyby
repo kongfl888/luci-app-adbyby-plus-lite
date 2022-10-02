@@ -64,7 +64,7 @@ ip_rule()
 
   ipset -N adbyby_esc hash:ip
   $ipt_n -A ADBYBY -m set --match-set adbyby_esc dst -j RETURN
-  
+
   local icount=$(uci show adbyby | grep 'filter_mode' | wc -l)
   let icount=icount-1
 	for i in $(seq 0 $icount)
@@ -113,8 +113,6 @@ add_dns()
 	fi
 	
 	mkdir -p /tmp/adbyby/rules/data /tmp/adbyby/rules/host
-	
-  #[ $block_ios -eq 1 ] && echo 'address=/mesu.apple.com/0.0.0.0' >> /tmp/dnsmasq.d/dnsmasq-adbyby.conf
 }
 
 del_dns()
