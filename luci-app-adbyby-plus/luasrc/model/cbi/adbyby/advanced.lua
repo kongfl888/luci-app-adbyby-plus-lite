@@ -12,7 +12,7 @@ s = m:section(TypedSection, "adbyby")
 s.anonymous = true
 
 o = s:option(Flag, "cron_mode")
-o.title = translate("Update the rule at 6 a.m. every morning and restart adbyby")
+o.title = translate("Update the rule at 6:10 a.m. every morning and restart adbyby")
 o.default = 0
 o.rmempty = false
 
