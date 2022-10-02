@@ -2,8 +2,8 @@
 local SYS  = require "luci.sys"
 
 local rule_count=0
-if nixio.fs.access("/usr/share/adbyby/rules/") then
-rule_count=tonumber(SYS.exec("/usr/share/adbyby/rule-count '/usr/share/adbyby/rules/'"))
+if nixio.fs.access("/tmp/rules/count.txt") then
+rule_count=nixio.fs.readfile("/tmp/rules/count.txt") or "0"
 end
 
 m = Map("adbyby")

@@ -30,28 +30,17 @@ function refresh_data()
 	local set = luci.http.formvalue("set")
 	local icount = 0
 
-if set == "rule_data" then
-luci.sys.exec("/usr/share/adbyby/rule-update")
-  icount = luci.sys.exec("/usr/share/adbyby/rule-count '/tmp/rules/'")
-  
-  if tonumber(icount)>0 then
-    if nixio.fs.access("/usr/share/adbyby/rules/") then
-      oldcount = luci.sys.exec("/usr/share/adbyby/rule-count '/usr/share/adbyby/rules/'")
-    else
-      oldcount=0
-    end
-  else
-    retstring ="-1"
-  end
-  
-  if tonumber(icount) ~= tonumber(oldcount) then
-		luci.sys.exec("rm -f /usr/share/adbyby/rules/data/* /usr/share/adbyby/rules/host/* && cp -a /tmp/rules /usr/share/adbyby/")
+	if set == "rule_data" then
+	luci.sys.exec("/usr/share/adbyby/rule-update")
+	icount = nixio.fs.readfile("/tmp/rules/count.txt") or "0"
+
+	if tonumber(icount)>0 then
 		luci.sys.exec("/etc/init.d/adbyby restart &")
 		retstring=tostring(math.ceil(tonumber(icount)))
 	else
-		retstring ="0"
+		retstring ="-1"
 	end
-end
-luci.http.prepare_content("application/json")
-luci.http.write_json({ ret=retstring ,retcount=icount})
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json({ ret=retstring ,retcount=icount})
 end

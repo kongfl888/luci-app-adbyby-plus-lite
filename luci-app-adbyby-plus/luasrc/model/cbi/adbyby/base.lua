@@ -5,8 +5,6 @@ local DISP = require "luci.dispatcher"
 
 local DL = SYS.exec("head -1 /tmp/adbyby/data/lazy.txt | awk -F' ' '{print $3,$4}'") or ""
 local DV = SYS.exec("head -1 /tmp/adbyby/data/video.txt | awk -F' ' '{print $3,$4}'") or ""
-local NR = SYS.exec("grep -v '^!' /usr/share/adbyby/data/rules.txt | wc -l")
-local NU = SYS.exec("cat /usr/share/adbyby/data/user.txt | wc -l")
 local UD = NXFS.readfile("/tmp/adbyby.updated") or "1970-01-01 00:00:00"
 
 m = Map("adbyby")

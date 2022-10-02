@@ -1,9 +1,6 @@
 #!/bin/sh
 
-uclient-fetch --no-check-certificate -O - 'https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt' > /tmp/adnew.conf
-if [ -s "/tmp/adnew.conf" ];then
-  /usr/share/adbyby/ad-update
-fi
+sh /usr/share/adbyby/rule-update
 
 rm -f /tmp/adbyby.updated 
 sleep 10

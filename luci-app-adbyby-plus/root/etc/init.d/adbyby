@@ -40,7 +40,9 @@ add_rules()
 {
 	rm -f $DATA_PATH/user.bin
 	grep -v ^! $PROG_PATH/rules.txt > $DATA_PATH/user.txt
-	cp $PROG_PATH/rules.txt $DATA_PATH/rules.txt
+	[ -s /tmp/rules/adnew.txt ] && cat /tmp/rules/adnew.txt >> $DATA_PATH/user.txt
+	cp -f $PROG_PATH/rules.txt $DATA_PATH/rules.txt
+	[ -s /tmp/rules/count.txt ] && cp -f /tmp/rules/count.txt $DATA_PATH/count.txt
 }
 
 

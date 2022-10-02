@@ -1,27 +1,28 @@
 #!/bin/sh -e
 
+rulename="/tmp/rules/adnew"
+adnewtxt="/tmp/rules/adnew.txt"
+
 url_md5() {
   echo -n $1|md5sum|cut -d ' ' -f1
 }
 
 convert_rules() {
-mkdir -p /tmp/rules/data
-mkdir -p /tmp/rules/host
+	mkdir -p /tmp/rules
 
-uclient-fetch -q --no-check-certificate $1 -O /tmp/adnew.conf
+	uclient-fetch -q  -T 20 --no-check-certificate $1 -O /tmp/adnew.conf
 
-rulename=$(url_md5 $1)
-
-if [ -f /tmp/adnew.conf ]; then
-  if (grep -wq "address=" /tmp/adnew.conf) ; then
-    cp /tmp/adnew.conf /tmp/rules/data/$rulename.conf
-  elif (grep -wq -e"0.0.0.0" -e"127.0.0.1" /tmp/adnew.conf) ; then
-    cp /tmp/adnew.conf /tmp/rules/host/$rulename.txt
-  else
-    cat /tmp/adnew.conf | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/0\.0\.0\.0:' > /tmp/rules/data/$rulename.conf
-  fi
-fi
-rm -rf /tmp/adnew.conf
+	if [ -f /tmp/adnew.conf ]; then
+		sed -i -e 's:^\!:d' -e ':^#\s+:d' /tmp/adnew.conf
+		if (grep -wq "address=" /tmp/adnew.conf) ; then
+			grep "^address=" /tmp/adnew.conf | sed -r -e 's:address\=\/:||:' -e 's:\/.*:\^:' >> $rulename
+		elif (grep -wq -e"0.0.0.0" -e"127.0.0.1" /tmp/adnew.conf) ; then
+			sed -r -e 's:0.0.0.0:127.0.0.1:' -e 's:127.0.0.1\s+:||:' /tmp/adnew.conf >> $rulename
+		else
+			cat /tmp/adnew.conf >> $rulename
+		 fi
+	fi
+	rm -rf /tmp/adnew.conf
 }
 
 ARRAY=$(uci get adbyby.@adbyby[0].subscribe_url 2> /dev/null)
@@ -34,3 +35,11 @@ do
   convert_rules $j
   i=`expr $i + 1`
 done
+
+if [ -s $rulename ]; then
+	echo "`sort -u $rulename 2>/dev/null`" > $adnewtxt
+	cat "$adnewtxt" 2>/dev/null | wc -l > /tmp/rules/count.txt
+	rm -rf $rulename
+else
+	echo "0" > /tmp/rules/count.txt
+fi
