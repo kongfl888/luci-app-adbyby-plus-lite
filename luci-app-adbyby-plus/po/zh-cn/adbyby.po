@@ -77,6 +77,12 @@ msgstr "高级设置"
 msgid "Update the rule at 6:10 a.m. every morning and restart adbyby"
 msgstr "每天早上六点十分更新规则并重启"
 
+msgid "Extract the domain name to plus"
+msgstr "提取域名给Plus列表"
+
+msgid "Try to extract the domain name to plus mode. But it may become heavy."
+msgstr "尝试自动从规则中提取域名给Plus模式，但这数量可能会很多。"
+
 msgid "ADP Host List"
 msgstr "Adblock Plus Hosts 记录数"
 

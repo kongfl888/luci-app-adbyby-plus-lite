@@ -34,6 +34,7 @@ get_config()
 	config_get_bool cron_mode $1 cron_mode 1
 	config_get wan_mode $1 wan_mode 1
 	config_get_bool mem_mode $1 mem_mode 1
+	config_get_bool plus_help $1 plus_help 0
 }
 
 add_rules()
@@ -96,6 +97,12 @@ ip_rule()
 	esac
 }
 
+get_domain(){
+	cat $1 |sed -r -e 's/#.*//' -e 's/\/.*//' -e 's/\$.*//' \
+	|grep -oE "[0-9a-zA-Z]([0-9a-zA-Z\-]*\.)+[a-zA-Z]{2,5}" \
+	|grep -vE '(\.jpg|\.png|\.js|\.asp|\.php|\.htm|\.mp|\.txt|\.gif)' >> $2
+}
+
 add_dns()
 {
 	mkdir -p /var/etc/dnsmasq-adbyby.d
@@ -108,12 +115,26 @@ add_dns()
 	local var=1
 	if [ $wan_mode -eq 1 ]; then
 		awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_wan"'\n",$0)}' $PROG_PATH/adhost.conf > $WAN_FILE
+		if [ $plus_help -eq 1 ]; then
+			rm -f /tmp/plusad1.txt
+			if [ -s $DATA_PATH/lazy.txt ]; then
+				get_domain "$DATA_PATH/lazy.txt" "/tmp/plusad1.txt"
+			fi
+			if [ -s $DATA_PATH/video.txt ]; then
+				get_domain "$DATA_PATH/video.txt" "/tmp/plusad1.txt"
+			fi
+			if [ -s $DATA_PATH/user.txt ]; then
+				get_domain "$DATA_PATH/user.txt" "/tmp/plusad1.txt"
+			fi
+			[ -s /tmp/plusad1.txt ] && awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_wan"'\n",$0)}' /tmp/plusad1.txt >> $WAN_FILE
+		fi
 		if ls /var/etc/dnsmasq-adbyby.d/* >/dev/null 2>&1; then
 			mkdir -p /tmp/dnsmasq.d
 		fi
 	fi
 
 	mkdir -p /tmp/adbyby/rules/data /tmp/adbyby/rules/host
+	rm -f /tmp/plusad1.txt
 }
 
 del_dns()

@@ -16,6 +16,12 @@ o.title = translate("Update the rule at 6:10 a.m. every morning and restart adby
 o.default = 0
 o.rmempty = false
 
+o = s:option(Flag, "plus_help")
+o.title = translate("Extract the domain name to plus")
+o.description = translate("Try to extract the domain name to plus mode. But it may become heavy.")
+o.default = 0
+o.rmempty = false
+
 o=s:option(DummyValue,"rule_data",translate("Subscribe 3rd Rules Data"))
 o.rawhtml  = true
 o.template = "adbyby/refresh"
