@@ -13,14 +13,14 @@ convert_rules() {
 	uclient-fetch -q  -T 20 --no-check-certificate $1 -O /tmp/adnew.conf
 
 	if [ -f /tmp/adnew.conf ]; then
-		sed -i -e 's:^\!:d' -e ':^#\s+:d' /tmp/adnew.conf
+		sed -i -e 's/^\!/d' -e '/^#\s+/d' -e '/https:\/\//d' /tmp/adnew.conf
 		if (grep -wq "address=" /tmp/adnew.conf) ; then
 			grep "^address=" /tmp/adnew.conf | sed -r -e 's:address\=\/:||:' -e 's:\/.*:\^:' >> $rulename
 		elif (grep -wq -e"0.0.0.0" -e"127.0.0.1" /tmp/adnew.conf) ; then
 			sed -r -e 's:0.0.0.0:127.0.0.1:' -e 's:127.0.0.1\s+:||:' /tmp/adnew.conf >> $rulename
 		else
 			cat /tmp/adnew.conf >> $rulename
-		 fi
+		fi
 	fi
 	rm -rf /tmp/adnew.conf
 }
