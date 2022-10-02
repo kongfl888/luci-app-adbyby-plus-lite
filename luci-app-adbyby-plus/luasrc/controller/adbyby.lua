@@ -12,7 +12,6 @@ function index()
 	entry({"admin", "services", "adbyby", "advanced"}, cbi("adbyby/advanced"), _("Advance Setting"), 20).leaf = true
 	entry({"admin", "services", "adbyby", "help"}, form("adbyby/help"), _("Plus+ Domain List"), 30).leaf = true
 	entry({"admin", "services", "adbyby", "esc"}, form("adbyby/esc"), _("Bypass Domain List"), 40).leaf = true
-	entry({"admin", "services", "adbyby", "black"}, form("adbyby/black"), _("Block Domain List"), 50).leaf = true
 	entry({"admin", "services", "adbyby", "block"}, form("adbyby/block"), _("Block IP List"), 60).leaf = true
 	entry({"admin", "services", "adbyby", "user"}, form("adbyby/user"), _("User-defined Rule"), 70).leaf = true
 	
