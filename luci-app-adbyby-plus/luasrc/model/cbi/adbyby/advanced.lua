@@ -31,6 +31,7 @@ o.write = function()
 end
 
 o = s:option(DynamicList, "subscribe_url", translate("Anti-AD Rules Subscribe"))
+o:value("https://raw.githubusercontents.com/cjx82630/cjxlist/master/cjx-annoyance.txt", translate("CJX-Annoyance"))
 o.rmempty = true
 
 return m
