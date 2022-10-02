@@ -110,8 +110,6 @@ add_dns()
 		awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_wan"'\n",$0)}' $PROG_PATH/adhost.conf > $WAN_FILE
 		if ls /var/etc/dnsmasq-adbyby.d/* >/dev/null 2>&1; then
 			mkdir -p /tmp/dnsmasq.d
-			cp /usr/share/adbyby/dnsmasq.adblock /var/etc/dnsmasq-adbyby.d/04-dnsmasq.adblock
-			cp /usr/share/adbyby/dnsmasq.ads /var/etc/dnsmasq-adbyby.d/05-dnsmasq.ads
 		fi
 	fi
 	
