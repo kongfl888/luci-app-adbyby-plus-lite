@@ -228,7 +228,7 @@ start()
 	[ ! -d "/tmp/adbyby/data" ]  && cp -a /usr/share/adbyby /tmp/ && rm -f /tmp/adbyby.updated
 	add_rules
 	kill_byby
-	sleep 5s
+	sleep 3s
 	/tmp/adbyby/adbyby >/dev/null 2>&1 &
 
 	del_rule
