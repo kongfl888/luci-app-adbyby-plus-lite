@@ -205,3 +205,15 @@ msgstr "域名黑名单"
 
 msgid "Block IP List"
 msgstr "IP黑名单"
+
+msgid "It is impossible to have a new version."
+msgstr "不可能再有新版本，勾选就每天早上6:15检查"
+
+msgid "Adbyby Application Auto Update"
+msgstr "自动更新主程序"
+
+msgid "Adbyby online"
+msgstr "Adbyby 在线版本"
+
+msgid "If not found adbyby, will download it base on this."
+msgstr "如果没有发现adbyby主程序，那将根据这个来下载。"

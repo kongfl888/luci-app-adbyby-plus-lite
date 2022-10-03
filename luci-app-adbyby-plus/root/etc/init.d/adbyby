@@ -35,6 +35,8 @@ get_config()
 	config_get wan_mode $1 wan_mode 1
 	config_get_bool mem_mode $1 mem_mode 1
 	config_get_bool plus_help $1 plus_help 0
+	config_get_bool exe_update $1 exe_update 0
+	config_get exe_arch $1 exe_arch 0
 }
 
 add_rules()
@@ -55,13 +57,14 @@ add_cron()
 	if [ $cron_mode -eq 1 ]; then
 	sed -i '/adblock.sh/d' $CRON_FILE
 		echo '10 6 * * * /usr/share/adbyby/adblock.sh > /tmp/adupdate.log 2>&1' >> $CRON_FILE
+		echo '15 6 * * * /usr/share/adbyby/appupdate.sh >> /tmp/adupdate.log 2>&1' >> $CRON_FILE
 		crontab $CRON_FILE
 	fi
 }
 
 del_cron()
 {
-	sed -i '/adblock.sh/d' $CRON_FILE
+	sed -i -e '/adblock.sh/d' -e '/appupdate.sh/d' $CRON_FILE
 	/etc/init.d/cron restart
 }
 
@@ -215,6 +218,9 @@ start()
 	config_foreach get_config adbyby
 
 	[ $enable -ne 0 ] || return
+	if [ ! -f $PROG_PATH/adbyby ]; then
+		sh $PROG_PATH/appupdate.sh $exe_arch
+	fi
 	[ -f $PROG_PATH/adbyby ] || return
 	add_cron
 	[ ! -d "/tmp/adbyby/data" ]  && cp -a /usr/share/adbyby /tmp/ && rm -f /tmp/adbyby.updated

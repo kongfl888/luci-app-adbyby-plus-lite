@@ -29,6 +29,23 @@ o:value("2", translate("No filter Mode (Must set in Client Filter Mode Settings 
 o.default = 1
 o.rmempty = false
 
+o = s:option(ListValue, "exe_arch", translate("Adbyby online"))
+o:value("0", translate("No check"))
+o:value("1", translate("armv5"))
+o:value("2", translate("armv7"))
+o:value("3", translate("mips"))
+o:value("4", translate("mipsle"))
+o:value("5", translate("i386"))
+o:value("6", translate("x86_64"))
+o.description = translate("If not found adbyby, will download it base on this.")
+o.default = 0
+o.rmempty = false
+
+o = s:option(Flag, "exe_update", translate("Adbyby Application Auto Update"))
+o.description = translate("It is impossible to have a new version.")
+o.default = 0
+o.rmempty = false
+
 o = s:option(Button, "restart", translate("Adbyby and Rule state"))
 o.inputtitle = translate("Update Adbyby Rules Manually")
 o.description = string.format("<strong>"..translate("Last Update Checked")..":</strong> %s<br /><strong>"..translate("Lazy Rule")..":</strong>%s <br /><strong>"..translate("Video Rule")..":</strong>%s", UD, DL, DV)
