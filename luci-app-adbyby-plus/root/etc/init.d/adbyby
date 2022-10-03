@@ -45,6 +45,7 @@ add_rules()
 	[ -s /tmp/rules/adnew.txt ] && cat /tmp/rules/adnew.txt |sort -u 2>/dev/null >> $DATA_PATH/user.txt
 	cp -f $PROG_PATH/rules.txt $DATA_PATH/rules.txt
 	[ -s /tmp/adbyby/data/count.txt ] && cp -f /tmp/adbyby/data/count.txt $DATA_PATH/count.txt
+	cp -a $DATA_PATH /tmp/adbyby
 }
 
 
@@ -208,7 +209,7 @@ start()
 	config_load adbyby
 	config_foreach get_config adbyby
 
-	if [ $enable -ne 0 ];  then
+	[ $enable -ne 0 ] || return
 	add_cron
 	[ ! -d "/tmp/adbyby/data" ]  && cp -a /usr/share/adbyby /tmp/ && rm -f /tmp/adbyby.updated
 	add_rules
@@ -219,7 +220,6 @@ start()
 	del_rule
 	add_rule
 	/etc/init.d/dnsmasq restart
-	fi
 }
 
 stop()
