@@ -2,7 +2,8 @@ local fs = require "nixio.fs"
 local conffile = "/usr/share/adbyby/adhost.conf"
 
 f = SimpleForm("custom")
-
+f.reset=false
+f.submit=false
 t = f:field(TextValue, "conf")
 t.rmempty = true
 t.rows = 13
@@ -10,15 +11,18 @@ function t.cfgvalue()
 	return fs.readfile(conffile) or ""
 end
 
-function f.handle(self, state, data)
-	if state == FORM_VALID then
-		if data.conf then
-			fs.writefile(conffile, data.conf:gsub("\r\n", "\n"))
-			luci.sys.exec("/etc/init.d/adbyby restart &")
-			luci.sys.call("sleep 3s")
-		end
+function sync_value_to_file(value, file)
+	value = value:gsub("\r\n?", "\n")
+	local old_value = nixio.fs.readfile(file)
+	if value ~= old_value then
+		nixio.fs.writefile(file, value)
 	end
-	return true
 end
+function t.write(self, section, value)
+	sync_value_to_file(value, conffile)
+end
+o = f:field(Button,"save_help")
+o.inputtitle=translate("Save")
+o.inputstyle = "submit"
 
 return f

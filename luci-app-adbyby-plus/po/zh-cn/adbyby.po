@@ -62,6 +62,9 @@ msgstr "规则状态"
 msgid "Restart Adbyby"
 msgstr "重启Adbyby"
 
+msgid "After you save text input, you may need to restart adbyby by hand."
+msgstr "在其他页面点击保存之后，你可能需要手动重启或使用下方应用按钮"
+
 msgid "Plus+ Domain List"
 msgstr "Plus+ 模式过滤的域名"
 
