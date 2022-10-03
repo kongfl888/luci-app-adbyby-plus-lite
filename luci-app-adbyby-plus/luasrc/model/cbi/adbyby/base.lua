@@ -10,7 +10,7 @@ local VE = SYS.exec("/usr/share/adbyby/adbyby --version | grep -oE '[0-9]+(\.[0-
 
 m = Map("adbyby")
 m.title	= translate("Adbyby Plus + Settings")
-m.description = translate("Adbyby Plus + can filter all kinds of banners, popups, video ads, and prevent tracking, privacy theft and a variety of malicious websites<br /><font color=\"red\">Plus + version combination mode can operation with Adblock Plus Host,filtering ads without losing bandwidth</font>")
+m.description = translate("Adbyby is a good guarder for family. It can prevent tracking, privacy theft and a variety of malicious websites, but only http/1.1 way.")
 
 m:section(SimpleSection).template  = "adbyby/adbyby_status"
 
@@ -29,6 +29,16 @@ o:value("2", translate("No filter Mode (Must set in Client Filter Mode Settings 
 o.default = 1
 o.rmempty = false
 
+o = s:option(Button, "restart", translate("Adbyby and Rule state"))
+o.inputtitle = translate("Update Adbyby Rules Manually")
+o.description = string.format("<strong>"..translate("Last Update Checked")..":</strong> %s<br /><strong>"..translate("Lazy Rule")..":</strong>%s <br /><strong>"..translate("Video Rule")..":</strong>%s", UD, DL, DV)
+o.inputstyle = "reload"
+o.write = function()
+	SYS.call("rm -rf /tmp/adbyby.updated /tmp/adbyby/admd5.json && /usr/share/adbyby/adbybyupdate.sh > /tmp/adupdate.log 2>&1 &")
+  SYS.call("sleep 5")
+	HTTP.redirect(DISP.build_url("admin", "services", "adbyby"))
+end
+
 o = s:option(ListValue, "exe_arch", translate("Adbyby online"))
 o:value("0", translate("No check"))
 o:value("1", translate("armv5"))
@@ -45,16 +55,6 @@ o = s:option(Flag, "exe_update", translate("Adbyby Application Auto Update"))
 o.description = translate("It is impossible to have a new version.")
 o.default = 0
 o.rmempty = false
-
-o = s:option(Button, "restart", translate("Adbyby and Rule state"))
-o.inputtitle = translate("Update Adbyby Rules Manually")
-o.description = string.format("<strong>"..translate("Last Update Checked")..":</strong> %s<br /><strong>"..translate("Lazy Rule")..":</strong>%s <br /><strong>"..translate("Video Rule")..":</strong>%s", UD, DL, DV)
-o.inputstyle = "reload"
-o.write = function()
-	SYS.call("rm -rf /tmp/adbyby.updated /tmp/adbyby/admd5.json && /usr/share/adbyby/adbybyupdate.sh > /tmp/adupdate.log 2>&1 &")
-  SYS.call("sleep 5")
-	HTTP.redirect(DISP.build_url("admin", "services", "adbyby"))
-end
 
 t = m:section(TypedSection, "acl_rule", translate("<strong>Client Filter Mode Settings</strong>"))
 t.description = translate("Filter mode settings can be set to specific LAN clients ( <font color=blue> No filter , Global filter </font> ) . Does not need to be set by default.")

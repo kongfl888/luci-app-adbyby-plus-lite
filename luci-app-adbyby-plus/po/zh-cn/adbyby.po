@@ -23,11 +23,14 @@ msgstr "<strong><font color=\"red\">广告屏蔽大师 Plus + 没有运行</font
 msgid "Adbyby Plus + can filter all kinds of banners, popups, video ads, and prevent tracking, privacy theft and a variety of malicious websites<br /><font color=\"red\">Plus + version combination mode can operation with Adblock Plus Host,filtering ads without losing bandwidth</font>"
 msgstr "广告屏蔽大师 Plus + 可以全面过滤各种横幅、弹窗、视频广告，同时阻止跟踪、隐私窃取及各种恶意网站<br /><font color=\"red\">Plus + 版本可以和 Adblock Plus Host 结合方式运行，过滤广告不损失带宽</font>"
 
+msgid "Adbyby is a good guarder for family. It can prevent tracking, privacy theft and a variety of malicious websites, but only http/1.1 way."
+msgstr "Adbyby 是一个优秀的家庭网络过滤大师，能阻止跟踪、隐私窃取及各种恶意网站，但只限于Http流量。"
+
 msgid "Adbyby Plus +"
 msgstr "广告屏蔽大师 Plus+"
 
 msgid "Adbyby Plus + Settings"
-msgstr "广告屏蔽大师 Plus+（支持  AdGuardHome /Host / DNSMASQ 规则）"
+msgstr "广告屏蔽大师 Plus+"
 
 msgid "Base Setting"
 msgstr "基本设置"
