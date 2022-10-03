@@ -12,6 +12,7 @@ CRON_FILE=/etc/crontabs/root
 CONFIG=adbyby
 ipt_n="iptables -t nat"
 port="8118"
+rset=0
 
 uci_get_by_name() {
 	local ret=$(uci get $CONFIG.$1.$2 2>/dev/null)
@@ -244,7 +245,13 @@ stop()
 	del_rule
 	del_cron
 	del_dns
-	/etc/init.d/dnsmasq restart
+	[ $rset -eq 0 ] && /etc/init.d/dnsmasq restart
+}
+
+restart(){
+	rset=1
+	stop
+	start
 }
 
 boot()

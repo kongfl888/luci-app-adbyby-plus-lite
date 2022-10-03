@@ -15,6 +15,7 @@ function f.handle(self, state, data)
 		if data.conf then
 			fs.writefile(conffile, data.conf:gsub("\r\n", "\n"))
 			luci.sys.exec("/etc/init.d/adbyby restart &")
+			luci.sys.call("sleep 3s")
 		end
 	end
 	return true
