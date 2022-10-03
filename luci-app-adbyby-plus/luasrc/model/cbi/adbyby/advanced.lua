@@ -32,7 +32,7 @@ o.description = translate("Adp rules for Adbyby, but AdGuardHome / Host / DNSMAS
 o = s:option(Button,"delete",translate("Delete All Subscribe Rules"))
 o.inputstyle = "reset"
 o.write = function()
-  SYS.exec("rm -f /usr/share/adbyby/rules/data/* /usr/share/adbyby/rules/host/*")
+  SYS.exec("rm -rf /tmp/rules/* /tmp/adbyby/data/count.txt")
   SYS.exec("/etc/init.d/adbyby restart 2>&1 &")
   luci.http.redirect(luci.dispatcher.build_url("admin", "services", "adbyby", "advanced"))
 end
