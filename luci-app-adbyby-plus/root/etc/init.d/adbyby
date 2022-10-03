@@ -231,9 +231,9 @@ start()
 	sleep 5s
 	/tmp/adbyby/adbyby >/dev/null 2>&1 &
 
-	add_dns
 	del_rule
 	add_rule
+	add_dns
 	/etc/init.d/dnsmasq restart
 }
 
