@@ -13,7 +13,7 @@ VE="???"
 end
 
 m = Map("adbyby")
-m.title	= translate("Adbyby Plus + Settings")
+m.title = translate("Adbyby Plus +, Lite")
 m.description = translate("Adbyby is a good guarder for family. It can prevent tracking, privacy theft and a variety of malicious websites, but only http/1.1 way.")
 
 m:section(SimpleSection).template  = "adbyby/adbyby_status"
