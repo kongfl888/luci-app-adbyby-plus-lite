@@ -215,6 +215,7 @@ start()
 	config_foreach get_config adbyby
 
 	[ $enable -ne 0 ] || return
+	[ -f $PROG_PATH/adbyby ] || return
 	add_cron
 	[ ! -d "/tmp/adbyby/data" ]  && cp -a /usr/share/adbyby /tmp/ && rm -f /tmp/adbyby.updated
 	add_rules
