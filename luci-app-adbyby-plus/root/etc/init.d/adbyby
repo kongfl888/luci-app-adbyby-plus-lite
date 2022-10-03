@@ -40,12 +40,13 @@ get_config()
 add_rules()
 {
 	rm -f $DATA_PATH/user.bin
+	rm -f /tmp/adbyby/data/user.bin 2>/dev/null
 	grep -v ^! $PROG_PATH/rules.txt > $DATA_PATH/user.txt
 	cat $PROG_PATH/adesc.conf | sed -e 's:^:@@||:' >> $DATA_PATH/user.txt
 	[ -s /tmp/rules/adnew.txt ] && cat /tmp/rules/adnew.txt |sort -u 2>/dev/null >> $DATA_PATH/user.txt
 	cp -f $PROG_PATH/rules.txt $DATA_PATH/rules.txt
 	[ -s /tmp/adbyby/data/count.txt ] && cp -f /tmp/adbyby/data/count.txt $DATA_PATH/count.txt
-	cp -a $DATA_PATH /tmp/adbyby
+	cp -arf $DATA_PATH /tmp/adbyby
 }
 
 
@@ -204,6 +205,10 @@ reload_rule()
 	add_rule
 }
 
+kill_byby(){
+	kill -9 $(busybox ps -w | grep "/tmp/adbyby/adbyby" | grep -v grep | grep -v update| grep -v adblock | awk '{print $1}') >/dev/null 2>&1
+}
+
 start()
 {
 	config_load adbyby
@@ -213,7 +218,8 @@ start()
 	add_cron
 	[ ! -d "/tmp/adbyby/data" ]  && cp -a /usr/share/adbyby /tmp/ && rm -f /tmp/adbyby.updated
 	add_rules
-
+	kill_byby
+	sleep 5s
 	/tmp/adbyby/adbyby >/dev/null 2>&1 &
 
 	add_dns
@@ -224,7 +230,7 @@ start()
 
 stop()
 {
-	kill -9 $(busybox ps -w | grep "/tmp/adbyby/adbyby" | grep -v grep | grep -v update| grep -v adblock | awk '{print $1}') >/dev/null 2>&1
+	kill_byby
 	config_load adbyby
 	config_foreach get_config adbyby
 	del_rule
