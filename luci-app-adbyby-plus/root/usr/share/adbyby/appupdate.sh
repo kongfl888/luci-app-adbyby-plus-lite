@@ -7,7 +7,7 @@ arc=""
 # if you have your file to use, edit this
 # path is file/*
 # check and via https://github.com/kongfl888/no-adbyby/tree/master/files
-baselink="https://raw.githubusercontents.com/kongfl888/no-adbyby/master/files"
+baselink="https://cdn.jsdelivr.net/gh/kongfl888/no-adbyby/files"
 downloader="uclient-fetch -q --no-check-certificate -T 20 -O"
 
 case "$1" in
