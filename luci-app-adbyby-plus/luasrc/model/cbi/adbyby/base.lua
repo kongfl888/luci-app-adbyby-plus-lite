@@ -6,7 +6,11 @@ local DISP = require "luci.dispatcher"
 local DL = SYS.exec("head -1 /tmp/adbyby/data/lazy.txt | awk -F' ' '{print $3,$4}'") or ""
 local DV = SYS.exec("head -1 /tmp/adbyby/data/video.txt | awk -F' ' '{print $3,$4}'") or ""
 local UD = NXFS.readfile("/tmp/adbyby.updated") or "1970-01-01 00:00:00"
-local VE = SYS.exec("/usr/share/adbyby/adbyby --version | grep -oE '[0-9]+(\.[0-9]+)*'") or "???"
+local VE = SYS.exec("/usr/share/adbyby/adbyby --version | grep -oE '[0-9]+(\.[0-9]+)*'")
+
+if (VE == nil or VE == "" ) then
+VE="???"
+end
 
 m = Map("adbyby")
 m.title	= translate("Adbyby Plus + Settings")
