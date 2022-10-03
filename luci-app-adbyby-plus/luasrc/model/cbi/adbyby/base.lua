@@ -45,7 +45,6 @@ end
 
 o = s:option(Button, "re_adbyby", translate("Restart"))
 o.inputtitle = translate("Restart Adbyby")
-o.description = translate("After you save text input, you may need to restart adbyby by hand.")
 o.inputstyle = "reload"
 o.write = function()
 	SYS.exec("/etc/init.d/adbyby restart &")

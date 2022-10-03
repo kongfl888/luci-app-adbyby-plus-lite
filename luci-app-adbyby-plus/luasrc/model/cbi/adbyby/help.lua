@@ -24,5 +24,6 @@ end
 o = f:field(Button,"save_help")
 o.inputtitle=translate("Save")
 o.inputstyle = "submit"
+o.description=translate("After saving, you may need restart adbyby")
 
 return f
