@@ -71,6 +71,7 @@ ip_rule()
 	do
 		local ip=$(uci_get_by_type acl_rule ipaddr '' $i)
 		local mode=$(uci_get_by_type acl_rule filter_mode '' $i)
+		[ -n "$ip" ] || continue
 		case "$mode" in
 		disable)
 			$ipt_n -A ADBYBY -s $ip -j RETURN
