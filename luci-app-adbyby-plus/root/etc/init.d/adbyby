@@ -41,14 +41,13 @@ get_config()
 
 add_rules()
 {
-	rm -f $DATA_PATH/user.bin
-	rm -f /tmp/adbyby/data/user.bin 2>/dev/null
+	rm -f $DATA_PATH/user.bin /tmp/adbyby/data/user.bin 2>/dev/null
 	grep -v ^! $PROG_PATH/rules.txt > $DATA_PATH/user.txt
 	cat $PROG_PATH/adesc.conf | sed -e 's:^:@@||:' >> $DATA_PATH/user.txt
 	[ -s /tmp/rules/adnew.txt ] && cat /tmp/rules/adnew.txt |sort -u 2>/dev/null >> $DATA_PATH/user.txt
 	cp -f $PROG_PATH/rules.txt $DATA_PATH/rules.txt
 	[ -s /tmp/adbyby/data/count.txt ] && cp -f /tmp/adbyby/data/count.txt $DATA_PATH/count.txt || rm -f $DATA_PATH/count.txt
-	cp -arf $DATA_PATH /tmp/adbyby
+	cp -au $DATA_PATH /tmp/adbyby
 }
 
 
@@ -130,11 +129,11 @@ add_dns()
 		|awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_wan"'\n",$0)}' > $tt
 		if [ $plus_help -eq 1 ]; then
 			rm -f /tmp/plusad1.txt
-			if [ -s $DATA_PATH/lazy.txt ]; then
-				get_domain "$DATA_PATH/lazy.txt" "/tmp/plusad1.txt"
+			if [ -s /tmp/adbyby/data/lazy.txt ]; then
+				get_domain "/tmp/adbyby/data/lazy.txt" "/tmp/plusad1.txt"
 			fi
-			if [ -s $DATA_PATH/video.txt ]; then
-				get_domain "$DATA_PATH/video.txt" "/tmp/plusad1.txt"
+			if [ -s /tmp/adbyby/data/video.txt ]; then
+				get_domain "/tmp/adbyby/data/video.txt" "/tmp/plusad1.txt"
 			fi
 			if [ -s $DATA_PATH/user.txt ]; then
 				get_domain "$DATA_PATH/user.txt" "/tmp/plusad1.txt"
