@@ -59,6 +59,9 @@ msgstr "点击开启"
 msgid "Adbyby and Rule state"
 msgstr "规则状态"
 
+msgid "Restart"
+msgstr "重启"
+
 msgid "Restart Adbyby"
 msgstr "重启Adbyby"
 
