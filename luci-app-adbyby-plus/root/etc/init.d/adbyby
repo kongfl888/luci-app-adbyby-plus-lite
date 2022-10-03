@@ -125,7 +125,9 @@ add_dns()
 	local tt="/tmp/adby_plus_d1.txt"
 	local var=1
 	if [ $wan_mode -eq 1 ]; then
-		awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_wan"'\n",$0)}' $PROG_PATH/adhost.conf > $tt
+		for i in ` grep -oE "[0-9]+(\.[0-9]+){3}" $PROG_PATH/adhost.conf`;do ipset -! add adbyby_wan $i;done
+		grep -oE "[0-9a-zA-Z][0-9a-zA-Z\-]*(\.[0-9a-zA-Z\-]+)*\.[a-zA-Z]{2,}" $PROG_PATH/adhost.conf \
+		|awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_wan"'\n",$0)}' > $tt
 		if [ $plus_help -eq 1 ]; then
 			rm -f /tmp/plusad1.txt
 			if [ -s $DATA_PATH/lazy.txt ]; then
