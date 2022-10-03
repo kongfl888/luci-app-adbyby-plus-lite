@@ -66,7 +66,23 @@ del_cron()
 ip_rule()
 {
   local icount=$(uci show adbyby | grep 'filter_mode' | wc -l)
-  let icount=icount-1
+
+	case $wan_mode in
+		0)
+			ipset -N adbyby_esc hash:ip
+			$ipt_n -I PREROUTING -p tcp --dport 80 -j ADBYBY 2>/dev/null
+			$ipt_n -I ADBYBY -m set --match-set adbyby_esc dst -j RETURN
+			;;
+		1)
+			ipset -N adbyby_wan hash:ip
+			$ipt_n -I PREROUTING -p tcp --dport 80 -m set --match-set adbyby_wan dst -j ADBYBY
+			;;
+		2)
+			echo "Cell ADBYBY is ready, pull in!"
+			;;
+	esac
+
+	let icount=icount-1
 	for i in $(seq 0 $icount)
 	do
 		local ip=$(uci_get_by_type acl_rule ipaddr '' $i)
@@ -77,25 +93,11 @@ ip_rule()
 			$ipt_n -A ADBYBY -s $ip -j RETURN
 			;;
 		global)
-			$ipt_n -I PREROUTING -s $ip -p tcp -j ADBYBY 2>/dev/null
+			$ipt_n -I PREROUTING -s $ip -p tcp --dport 80 -j ADBYBY 2>/dev/null
 			;;
 		esac
 	done
 
-	case $wan_mode in
-		0)
-			ipset -N adbyby_esc hash:ip
-			$ipt_n -I PREROUTING -p tcp --dport 80 -j ADBYBY 2>/dev/null
-			$ipt_n -A ADBYBY -m set --match-set adbyby_esc dst -j RETURN
-			;;
-		1)
-			ipset -N adbyby_wan hash:ip
-			$ipt_n -A PREROUTING -p tcp --dport 80 -m set --match-set adbyby_wan dst -j ADBYBY
-			;;
-		2)
-			echo "Cell ADBYBY is ready, pull in!"
-			;;
-	esac
 }
 
 get_domain(){
@@ -157,8 +159,8 @@ add_rule()
 	$ipt_n -A ADBYBY -d 192.168.0.0/16 -j RETURN
 	$ipt_n -A ADBYBY -d 224.0.0.0/4 -j RETURN
 	$ipt_n -A ADBYBY -d 240.0.0.0/4 -j RETURN
-	$ipt_n -A ADBYBY -p tcp -j REDIRECT --to-ports $port 2>/dev/null
 	ip_rule
+	$ipt_n -A ADBYBY -p tcp -j REDIRECT --to-ports $port 2>/dev/null
 	if [ $(ipset list music -name -quiet | grep music) ]; then
 		$ipt_n -A ADBYBY -m set --match-set music dst -j RETURN 2>/dev/null
 	fi
@@ -167,15 +169,22 @@ add_rule()
 	echo -e "/etc/init.d/adbyby restart" > "/var/etc/adbyby.include"
 }
 
+remov_PREADBYBY(){
+	$ipt_n -F ADBYBY 2>/dev/null
+	for i in `$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"|awk '{print $1}'`;do
+		$ipt_n -D PREROUTING $i 2>/dev/null
+	done
+	$ipt_n -X ADBYBY 2>/dev/null
+}
+
 del_rule()
 {
-	$ipt_n -D PREROUTING -p tcp --dport 80 -j ADBYBY 2>/dev/null
-	$ipt_n -F ADBYBY 2>/dev/null
-	$ipt_n -X ADBYBY 2>/dev/null
 	ipset -F adbyby_esc 2>/dev/null
 	ipset -X adbyby_esc 2>/dev/null
 	ipset -F adbyby_wan 2>/dev/null
 	ipset -X adbyby_wan 2>/dev/null
+	remov_PREADBYBY
+	remov_PREADBYBY
 }
 
 reload_rule()
