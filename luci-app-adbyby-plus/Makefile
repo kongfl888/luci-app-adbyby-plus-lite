@@ -10,8 +10,8 @@ LUCI_DEPENDS:=+uclient-fetch +ipset +dnsmasq-full
 LUCI_PKGARCH:=all
 
 PKG_NAME:=luci-app-adbyby-plus
-PKG_VERSION:=2.0
-PKG_RELEASE:=76k
+PKG_VERSION:=2.0k
+PKG_RELEASE:=76
 
 define Package/$(PKG_NAME)/postinst
 #!/bin/sh

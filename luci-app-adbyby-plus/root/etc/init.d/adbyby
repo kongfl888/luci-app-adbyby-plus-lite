@@ -55,7 +55,7 @@ add_rules()
 add_cron()
 {
 	if [ $cron_mode -eq 1 ]; then
-	sed -i '/adblock.sh/d' $CRON_FILE
+		del_cron
 		echo '10 6 * * * /usr/share/adbyby/adblock.sh > /tmp/adupdate.log 2>&1' >> $CRON_FILE
 		echo '15 6 * * * /usr/share/adbyby/appupdate.sh >> /tmp/adupdate.log 2>&1' >> $CRON_FILE
 		crontab $CRON_FILE
@@ -64,8 +64,8 @@ add_cron()
 
 del_cron()
 {
-	sed -i -e '/adblock.sh/d' -e '/appupdate.sh/d' $CRON_FILE
-	/etc/init.d/cron restart
+	sed -i -e "/adbyby\/adblock.sh/d" -e "/adbyby\/appupdate.sh/d" $CRON_FILE
+	[ $rset -eq 0 ] && /etc/init.d/cron restart
 }
 
 ip_rule()
