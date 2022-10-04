@@ -13,6 +13,13 @@ PKG_NAME:=luci-app-adbyby-plus
 PKG_VERSION:=2.0
 PKG_RELEASE:=76k
 
+define Package/$(PKG_NAME)/postinst
+#!/bin/sh
+	chmod a+x ${IPKG_INSTROOT}/etc/init.d/adbyby >/dev/null 2>&1
+	chmod a+x ${IPKG_INSTROOT}/usr/share/adbyby/* >/dev/null 2>&1
+	exit 0
+endef
+
 include $(TOPDIR)/feeds/luci/luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
