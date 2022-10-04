@@ -23,8 +23,9 @@ EOF
 
 mkdir -p /etc/dnsmasq.d
 
-/etc/init.d/adbyby stop
+chmod 0775 /usr/share/adbyby/* >/dev/null 2>&1
+chmod 0775 /etc/init.d/adbyby >/dev/null 2>&1
+/etc/init.d/adbyby stop >/dev/null 2>&1
 /etc/init.d/adbyby enable
-chmod 0775 /usr/share/adbyby/*
-rm -f /tmp/luci-indexcache
+rm -f /tmp/luci-indexcache*
 exit 0
