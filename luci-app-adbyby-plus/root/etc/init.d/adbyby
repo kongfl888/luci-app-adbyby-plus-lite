@@ -74,9 +74,7 @@ ip_rule()
 
 	case $wan_mode in
 		0)
-			ipset -N adbyby_esc hash:ip
-			$ipt_n -I PREROUTING -p tcp --dport 80 -j ADBYBY 2>/dev/null
-			$ipt_n -I ADBYBY -m set --match-set adbyby_esc dst -j RETURN
+			$ipt_n -I PREROUTING -p tcp -j ADBYBY 2>/dev/null
 			;;
 		1)
 			ipset -N adbyby_wan hash:ip
@@ -95,14 +93,15 @@ ip_rule()
 		[ -n "$ip" ] || continue
 		case "$mode" in
 		disable)
-			$ipt_n -A ADBYBY -s $ip -j RETURN
+			$ipt_n -I ADBYBY -s $ip -j RETURN
 			;;
 		global)
-			$ipt_n -I PREROUTING -s $ip -p tcp --dport 80 -j ADBYBY 2>/dev/null
+			$ipt_n -I PREROUTING -s $ip -p tcp -j ADBYBY 2>/dev/null
 			;;
 		esac
 	done
-
+	ipset -N adbyby_esc hash:ip
+	$ipt_n -I ADBYBY -m set --match-set adbyby_esc dst -j RETURN
 }
 
 get_domain(){
@@ -165,14 +164,15 @@ del_dns()
 add_rule()
 {
 	$ipt_n -N ADBYBY
-	$ipt_n -A ADBYBY -d 0.0.0.0/8 -j RETURN
-	$ipt_n -A ADBYBY -d 10.0.0.0/8 -j RETURN
-	$ipt_n -A ADBYBY -d 127.0.0.0/8 -j RETURN
-	$ipt_n -A ADBYBY -d 169.254.0.0/16 -j RETURN
-	$ipt_n -A ADBYBY -d 172.16.0.0/12 -j RETURN
-	$ipt_n -A ADBYBY -d 192.168.0.0/16 -j RETURN
-	$ipt_n -A ADBYBY -d 224.0.0.0/4 -j RETURN
-	$ipt_n -A ADBYBY -d 240.0.0.0/4 -j RETURN
+	$ipt_n -I ADBYBY -p tcp --dport 443 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -d 0.0.0.0/8 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -d 10.0.0.0/8 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -d 127.0.0.0/8 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -d 169.254.0.0/16 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -d 172.16.0.0/12 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -d 192.168.0.0/16 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -d 224.0.0.0/4 -j RETURN
+	$ipt_n -A ADBYBY -p tcp -d 240.0.0.0/4 -j RETURN
 	ip_rule
 	$ipt_n -A ADBYBY -p tcp -j REDIRECT --to-ports $port 2>/dev/null
 	if [ $(ipset list music -name -quiet | grep music) ]; then
@@ -185,8 +185,17 @@ add_rule()
 
 remov_PREADBYBY(){
 	$ipt_n -F ADBYBY 2>/dev/null
-	for i in `$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"|awk '{print $1}'`;do
+	local ia=0
+	local i=1
+	local c=0
+	while true;do
+		ia=`$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"|wc -l`
+		[ $ia -eq 0 ] && break
+		i=`$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"|awk '{print $1}'|head -n1`
 		$ipt_n -D PREROUTING $i 2>/dev/null
+		let c++
+		[ $c -gt 20 ] && $ipt_n -F ADBYBY 2>/dev/null
+		[ $c -gt 255 ] && break
 	done
 	$ipt_n -X ADBYBY 2>/dev/null
 }
@@ -197,7 +206,6 @@ del_rule()
 	ipset -X adbyby_esc 2>/dev/null
 	ipset -F adbyby_wan 2>/dev/null
 	ipset -X adbyby_wan 2>/dev/null
-	remov_PREADBYBY
 	remov_PREADBYBY
 }
 
