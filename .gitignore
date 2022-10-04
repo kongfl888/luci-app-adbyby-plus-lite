@@ -1,0 +1,7 @@
+*.lmo
+
+*.lnk
+
+*.bak
+
+build*.sh
