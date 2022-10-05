@@ -54,6 +54,10 @@ lite的意思。没错，胡。。又回来了。
 
 ## 下载
 
+版本控制，分支版本号说明，版本管理，版本区分。
+
+以2.0K1为例子，2.0表示是基于上游的2.0版，而K1是分支的内部版本管理，分支内部的版本更新将以这个数字做递增。
+
 [IPK Releases](https://github.com/kongfl888/luci-app-adbyby-plus-lite/releases)
 
 ## 致谢
