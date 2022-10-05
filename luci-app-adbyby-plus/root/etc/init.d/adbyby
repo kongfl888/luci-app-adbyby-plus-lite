@@ -194,8 +194,8 @@ remov_PREADBYBY(){
 		i=`$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"|awk '{print $1}'|head -n1`
 		$ipt_n -D PREROUTING $i 2>/dev/null
 		let c++
-		[ $c -gt 20 ] && $ipt_n -F ADBYBY 2>/dev/null
-		[ $c -gt 255 ] && break
+		[ $c -gt 10 ] && sleep 1s && $ipt_n -F ADBYBY 2>/dev/null
+		[ $c -gt 25 ] && break
 	done
 	$ipt_n -X ADBYBY 2>/dev/null
 }
