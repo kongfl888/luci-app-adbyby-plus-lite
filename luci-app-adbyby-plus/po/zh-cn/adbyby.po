@@ -46,8 +46,8 @@ msgstr "重启Adbyby"
 msgid "After saving, you may need restart adbyby"
 msgstr "全部保存之后，你可能还需要手动重启，让配置生效。"
 
-msgid "Plus+ Domain List"
-msgstr "Plus+ 模式过滤的域名"
+msgid "Custom Plus+ Domain List"
+msgstr "自定义的Plus+模式过滤域名"
 
 msgid "Bypass Domain List"
 msgstr "域名白名单"
