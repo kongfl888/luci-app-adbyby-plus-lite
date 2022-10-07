@@ -1,6 +1,6 @@
 #!/bin/sh /etc/rc.common
 
-START=96
+START=99
 STOP=10
 
 
@@ -13,6 +13,7 @@ CONFIG=adbyby
 ipt_n="iptables -t nat"
 port="8118"
 rset=0
+bo=0
 
 uci_get_by_name() {
 	local ret=$(uci get $CONFIG.$1.$2 2>/dev/null)
@@ -235,11 +236,11 @@ start()
 	add_cron
 	[ ! -d "/tmp/adbyby/data" ]  && cp -a /usr/share/adbyby /tmp/ && rm -f /tmp/adbyby.updated
 	add_rules
-	kill_byby
+	[ $bo -eq 0 ] && kill_byby
 	sleep 3s
 	/tmp/adbyby/adbyby >/dev/null 2>&1 &
 
-	del_rule
+	[ $bo -eq 0 ] && del_rule
 	add_rule
 	add_dns
 	/etc/init.d/dnsmasq restart
@@ -264,6 +265,7 @@ restart(){
 
 boot()
 {
+	bo=1
 	mkdir -p /tmp/adbyby && cp -a /usr/share/adbyby /tmp/
 	start
 }
