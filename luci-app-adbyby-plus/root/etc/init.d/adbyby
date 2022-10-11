@@ -58,7 +58,11 @@ add_cron()
 	if [ $cron_mode -eq 1 ]; then
 		del_cron
 		echo '10 6 * * * /usr/share/adbyby/adblock.sh > /tmp/adupdate.log 2>&1' >> $CRON_FILE
-		echo '15 6 * * * /usr/share/adbyby/appupdate.sh >> /tmp/adupdate.log 2>&1' >> $CRON_FILE
+		crontab $CRON_FILE
+	fi
+	if [ $exe_update -eq 1 ]; then
+		del_cron
+		echo '15 6 * * * /usr/share/adbyby/appupdate.sh $exe_arch >> /tmp/adupdate.log 2>&1' >> $CRON_FILE
 		crontab $CRON_FILE
 	fi
 }
