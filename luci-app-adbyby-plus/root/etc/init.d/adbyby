@@ -10,7 +10,7 @@ DATA_PATH=$PROG_PATH/data
 WAN_FILE=/var/etc/dnsmasq-adbyby.d/03-adbyby-ipset.conf
 CRON_FILE=/etc/crontabs/root
 CONFIG=adbyby
-ipt_n="iptables -t nat"
+ipt_n="iptables -w 2 -t nat"
 port="8118"
 rset=0
 bo=0
@@ -82,7 +82,7 @@ ip_rule()
 			$ipt_n -I PREROUTING -p tcp -j ADBYBY 2>/dev/null
 			;;
 		1)
-			ipset -N adbyby_wan hash:ip
+			ipset -! -N adbyby_wan hash:ip
 			$ipt_n -I PREROUTING -p tcp --dport 80 -m set --match-set adbyby_wan dst -j ADBYBY
 			;;
 		2)
@@ -105,7 +105,7 @@ ip_rule()
 			;;
 		esac
 	done
-	ipset -N adbyby_esc hash:ip
+	ipset -! -N adbyby_esc hash:ip
 	$ipt_n -I ADBYBY -m set --match-set adbyby_esc dst -j RETURN
 }
 
@@ -190,27 +190,30 @@ add_rule()
 remov_PREADBYBY(){
 	$ipt_n -F ADBYBY 2>/dev/null
 	local ia=0
+	local ic=0
 	local i=1
 	local c=0
 	while true;do
-		ia=`$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"|wc -l`
-		[ $ia -eq 0 ] && break
-		i=`$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"|awk '{print $1}'|head -n1`
+		sleep 1s
+		ia=`$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"`
+		ic=`echo "$ia"|wc -l`
+		[ $ic -eq 0 ] && break
+		i=`echo "$ia" | awk '{print $1}'|head -n1`
 		$ipt_n -D PREROUTING $i 2>/dev/null
 		let c++
-		[ $c -gt 10 ] && sleep 1s && $ipt_n -F ADBYBY 2>/dev/null
-		[ $c -gt 25 ] && break
+		[ $c -gt 12 ] && sleep 1s && $ipt_n -F ADBYBY 2>/dev/null
+		[ $c -gt 15 ] && break
 	done
 	$ipt_n -X ADBYBY 2>/dev/null
 }
 
 del_rule()
 {
-	ipset -F adbyby_esc 2>/dev/null
-	ipset -X adbyby_esc 2>/dev/null
-	ipset -F adbyby_wan 2>/dev/null
-	ipset -X adbyby_wan 2>/dev/null
 	remov_PREADBYBY
+	ipset -! -F adbyby_esc 2>/dev/null
+	ipset -! -X adbyby_esc 2>/dev/null
+	ipset -! -F adbyby_wan 2>/dev/null
+	ipset -! -X adbyby_wan 2>/dev/null
 }
 
 reload_rule()
@@ -254,7 +257,7 @@ stop()
 	kill_byby
 	config_load adbyby
 	config_foreach get_config adbyby
-	del_rule
+	[ $rset -eq 0 ] && del_rule
 	del_cron
 	del_dns
 	[ $rset -eq 0 ] && /etc/init.d/dnsmasq restart
