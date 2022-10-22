@@ -147,7 +147,7 @@ add_dns()
 				awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_wan"'\n",$0)}' /tmp/plusad1.txt >> $tt
 			fi
 		fi
-		[ -s $tt ] && echo "`sort -u ${tt} 2>/dev/null`" >> $WAN_FILE
+		[ -s $tt ] && echo "`sort -u ${tt} 2>/dev/null`" > $WAN_FILE
 		if ls /var/etc/dnsmasq-adbyby.d/* >/dev/null 2>&1; then
 			mkdir -p /tmp/dnsmasq.d
 		fi
