@@ -111,7 +111,7 @@ ip_rule()
 
 get_domain(){
 	local tt="/tmp/adby_plus_d.txt"
-	cat $1 |sed -r -e 's/#.*//' -e 's/\/.*//' -e 's/\$.*//' \
+	cat $1 |sed -r -e 's/#.*//' -e 's/\/.*//' -e 's/\$.*//' -e 's/^!.*//' -e '/^@@/d' -e '/^~/d' \
 	|grep -oE "[0-9a-zA-Z]([0-9a-zA-Z\-]*\.)+[a-zA-Z]{2,5}" \
 	|grep -vE '(\.jpg|\.png|\.js|\.asp|\.php|\.htm|\.mp|\.txt|\.gif)' > $tt
 	echo "`sort -u ${tt} 2>/dev/null`" >> $2
