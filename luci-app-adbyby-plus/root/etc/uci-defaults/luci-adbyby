@@ -27,5 +27,6 @@ chmod 0775 /usr/share/adbyby/* >/dev/null 2>&1
 chmod 0775 /etc/init.d/adbyby >/dev/null 2>&1
 /etc/init.d/adbyby stop >/dev/null 2>&1
 /etc/init.d/adbyby enable
+rm -f /usr/share/adbyby/luciver.txt >/dev/null 2>&1
 rm -f /tmp/luci-indexcache*
 exit 0
