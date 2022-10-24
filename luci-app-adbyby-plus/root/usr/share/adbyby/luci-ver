@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# [K]2022
+
+new=`uclient-fetch -q --no-check-certificate -T 10 https://cdn.jsdelivr.net/gh/kongfl888/luci-app-adbyby-plus-lite/luci-app-adbyby-plus/Makefile \
+-O -|grep "PKG_VERSION"|grep -oE "[Kk]\d+(\.\d+)*"`
+
+old=`opkg list-installed luci-app-adbyby-plus|grep -oE "[Kk]\d+(\.\d+)*"`
+
+if [ -z "$new" ];then
+	echo "$old" > /usr/share/adbyby/luciver.txt
+elif [ "$old" == "$new" ];then
+	echo "$old($new)" > /usr/share/adbyby/luciver.txt
+else
+	echo "$old(new: $new)" > /usr/share/adbyby/luciver.txt
+fi
+
+[ -s /usr/share/adbyby/luciver.txt ] && sed -i -r "/^\s*$/d" /usr/share/adbyby/luciver.txt
