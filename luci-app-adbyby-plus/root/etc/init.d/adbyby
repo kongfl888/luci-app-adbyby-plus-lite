@@ -254,12 +254,12 @@ start()
 
 stop()
 {
-	kill_byby
 	config_load adbyby
 	config_foreach get_config adbyby
 	[ $rset -eq 0 ] && del_rule
 	del_cron
 	del_dns
+	kill_byby
 	[ $rset -eq 0 ] && /etc/init.d/dnsmasq restart
 }
 
