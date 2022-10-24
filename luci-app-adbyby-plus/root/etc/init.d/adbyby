@@ -127,11 +127,11 @@ add_dns()
 
 	[ $wan_mode -eq 0 ] && awk '!/^$/&&!/^#/{printf("ipset=/%s/'"adbyby_esc"'\n",$0)}' $PROG_PATH/adesc.conf > /var/etc/dnsmasq-adbyby.d/06-dnsmasq.esc
 
-	echo 'conf-dir=/var/etc/dnsmasq-adbyby.d' > /tmp/dnsmasq.d/dnsmasq-adbyby.conf
 	local tt="/tmp/adby_plus_d1.txt"
 	local var=1
+	local dcc=0
 	local ipsmd5=""
-	local addnsmd5=`md5sum /tmp/dnsmasq.d/dnsmasq-adbyby.conf 2>/dev/null| cut -d ' ' -f1`
+	local addnsmd5=""
 	if [ $wan_mode -eq 1 ]; then
 		for i in ` grep -oE "[0-9]+(\.[0-9]+){3}" $PROG_PATH/adhost.conf`;do ipset -! add adbyby_wan $i;done
 		grep -oE "[0-9a-zA-Z][0-9a-zA-Z\-]*(\.[0-9a-zA-Z\-]+)*\.[a-zA-Z]{2,}" $PROG_PATH/adhost.conf \
@@ -157,7 +157,11 @@ add_dns()
 			mkdir -p /tmp/dnsmasq.d
 		fi
 	fi
-
+	dcc=`ls /var/etc/dnsmasq-adbyby.d/* 2>/dev/null | wc -l`
+	if [ $dcc -gt 0 ];then
+		echo 'conf-dir=/var/etc/dnsmasq-adbyby.d' > /tmp/dnsmasq.d/dnsmasq-adbyby.conf
+		addnsmd5=`md5sum /tmp/dnsmasq.d/dnsmasq-adbyby.conf 2>/dev/null| cut -d ' ' -f1`
+	fi
 	mkdir -p /tmp/adbyby/rules/data /tmp/adbyby/rules/host
 	echo "$addnsmd5|$ipsmd5" > /tmp/adbyby/addnsmd5.txt
 	rm -f /tmp/plusad1.txt
