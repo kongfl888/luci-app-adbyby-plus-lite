@@ -14,6 +14,8 @@ ipt_n="iptables -w 2 -t nat"
 port="8118"
 rset=0
 bo=0
+amd5=""
+imd5=""
 
 uci_get_by_name() {
 	local ret=$(uci get $CONFIG.$1.$2 2>/dev/null)
@@ -128,6 +130,8 @@ add_dns()
 	echo 'conf-dir=/var/etc/dnsmasq-adbyby.d' > /tmp/dnsmasq.d/dnsmasq-adbyby.conf
 	local tt="/tmp/adby_plus_d1.txt"
 	local var=1
+	local ipsmd5=""
+	local addnsmd5=`md5sum /tmp/dnsmasq.d/dnsmasq-adbyby.conf 2>/dev/null| cut -d ' ' -f1`
 	if [ $wan_mode -eq 1 ]; then
 		for i in ` grep -oE "[0-9]+(\.[0-9]+){3}" $PROG_PATH/adhost.conf`;do ipset -! add adbyby_wan $i;done
 		grep -oE "[0-9a-zA-Z][0-9a-zA-Z\-]*(\.[0-9a-zA-Z\-]+)*\.[a-zA-Z]{2,}" $PROG_PATH/adhost.conf \
@@ -148,12 +152,14 @@ add_dns()
 			fi
 		fi
 		[ -s $tt ] && echo "`sort -u ${tt} 2>/dev/null`" > $WAN_FILE
+		ipsmd5=`md5sum $WAN_FILE 2>/dev/null| cut -d ' ' -f1`
 		if ls /var/etc/dnsmasq-adbyby.d/* >/dev/null 2>&1; then
 			mkdir -p /tmp/dnsmasq.d
 		fi
 	fi
 
 	mkdir -p /tmp/adbyby/rules/data /tmp/adbyby/rules/host
+	echo "$addnsmd5|$ipsmd5" > /tmp/adbyby/addnsmd5.txt
 	rm -f /tmp/plusad1.txt
 	rm -f $tt
 }
@@ -229,6 +235,17 @@ kill_byby(){
 	kill -9 $(busybox ps -w | grep "/tmp/adbyby/adbyby" | grep -v grep | grep -v update| grep -v adblock | awk '{print $1}') >/dev/null 2>&1
 }
 
+dnsmasq_do(){
+	[ -s /tmp/adbyby/addnsmd5.txt ] || return
+	local namd5=`cat /tmp/adbyby/addnsmd5.txt 2>/dev/null | cut -d '|' -f1`
+	local nimd5=`cat /tmp/adbyby/addnsmd5.txt 2>/dev/null | cut -d '|' -f2`
+	if [ "$amd5" == "$namd5" -a "$imd5" == "$nimd5" ]; then
+		return
+	else
+		/etc/init.d/dnsmasq restart
+	fi
+}
+
 start()
 {
 	config_load adbyby
@@ -248,8 +265,10 @@ start()
 
 	[ $bo -eq 0 ] && del_rule
 	add_rule
+	amd5=`cat /tmp/adbyby/addnsmd5.txt 2>/dev/null | cut -d '|' -f1`
+	imd5=`cat /tmp/adbyby/addnsmd5.txt 2>/dev/null | cut -d '|' -f2`
 	add_dns
-	/etc/init.d/dnsmasq restart
+	dnsmasq_do
 }
 
 stop()
