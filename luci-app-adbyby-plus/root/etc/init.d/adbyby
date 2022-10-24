@@ -203,12 +203,14 @@ remov_PREADBYBY(){
 	local ic=0
 	local i=1
 	local c=0
+	iptables-save -c | grep -v ADBYBY | iptables-restore -c
 	while true;do
 		sleep 1s
 		ia=`$ipt_n --line-numbers -L PREROUTING |grep "ADBYBY"`
-		ic=`echo "$ia"|wc -l`
+		ic=`echo "$ia" | grep -v "^$" |wc -l`
 		[ $ic -eq 0 ] && break
 		i=`echo "$ia" | awk '{print $1}'|head -n1`
+		[ -n "$i" ] || continue
 		$ipt_n -D PREROUTING $i 2>/dev/null
 		let c++
 		[ $c -gt 12 ] && sleep 1s && $ipt_n -F ADBYBY 2>/dev/null
