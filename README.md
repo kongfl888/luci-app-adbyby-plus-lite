@@ -46,7 +46,7 @@ lite的意思。没错，胡。。又回来了。
 
 这些都是硬伤，唯主程序的开发者可以解决。
 
-满怀希望地来到我的项目主页是不是感到有点失望。再过段时间，大概就只能用在**私人的特殊场景了**。
+满怀希望地来到我的项目主页是不是感到有点失望。再过段时间，大概就只能用在私人的<b>特殊场景</b>了。
 
 ## 截图
 
@@ -58,7 +58,17 @@ lite的意思。没错，胡。。又回来了。
 
 以2.0K1为例子，2.0表示是基于上游的2.0版，而K1是分支的内部版本管理，分支内部的版本更新将以这个数字做递增。
 
-[IPK Releases](https://github.com/kongfl888/luci-app-adbyby-plus-lite/releases)
+安装包：[IPK Releases](https://github.com/kongfl888/luci-app-adbyby-plus-lite/releases)
+
+网盘：[能进到这里，我不确定各位是否会需要网盘](https://www.ksite.cn/contents/luci-app-adbyby.html#download)
+
+## 注意
+
+没有安装adbyby本体且首次使用，请在启用之前，先选择架构，应用并保存后，再启用本应用。
+
+## 编译
+
+（克隆 -- 拷贝 -- make menuconfig -- 略）
 
 ## 致谢
 
