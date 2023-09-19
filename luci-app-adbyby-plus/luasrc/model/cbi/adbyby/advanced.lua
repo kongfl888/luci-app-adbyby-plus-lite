@@ -39,6 +39,15 @@ end
 
 o = s:option(DynamicList, "subscribe_url", translate("Anti-AD Rules Subscribe"))
 o:value("https://cdn.jsdelivr.net/gh/cjx82630/cjxlist/cjx-annoyance.txt", translate("CJX-Annoyance"))
+o:value("https://cdn.jsdelivr.net/gh/kongfl888/ad-rules/lazy.txt", translate("CJX-Annoyance"))
+o:value("https://cdn.jsdelivr.net/gh/kongfl888/ad-rules/video.txt", translate("CJX-Annoyance"))
+o:value("https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt", translate("CJX-Annoyance"))
+o:value("https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt", translate("CJX-Annoyance"))
+o:value("https://easylist-downloads.adblockplus.org/fanboy-notifications.txt", translate("CJX-Annoyance"))
+o:value("https://easylist-downloads.adblockplus.org/fanboy-social.txt", translate("CJX-Annoyance"))
+o:value("https://easylist-downloads.adblockplus.org/i_dont_care_about_cookies.txt", translate("CJX-Annoyance"))
+o:value("https://anti-ad.net/easylist.txt", translate("CJX-Annoyance"))
+o:value("https://gitee.com/xinggsf/Adblock-Rule/raw/master/rule.txt", translate("CJX-Annoyance"))
 o.rmempty = true
 
 return m
