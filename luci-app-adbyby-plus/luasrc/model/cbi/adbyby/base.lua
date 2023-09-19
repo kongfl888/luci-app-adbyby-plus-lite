@@ -19,7 +19,7 @@ end
 
 m = Map("adbyby")
 m.title = translate("Adbyby Plus +, Lite")
-m.description = translate("Adbyby is a good guarder for family. It can prevent tracking, privacy theft and a variety of malicious websites, but only http/1.1 way.").." | <a href=\"https://github.com/kongfl888/luci-app-adbyby-plus-lite\" target=\"_blank\" style=\"color:mediumturquoise\" >OPEN SOURCE</a>"
+m.description = translate("Adbyby is a good guarder for family. It can prevent tracking, privacy theft and a variety of malicious websites, but only http/1.1 way.").." | <a href=\"https://github.com/ywt114/luci-app-adbyby-plus-lite\" target=\"_blank\" style=\"color:mediumturquoise\" >OPEN SOURCE</a>"
 
 m:section(SimpleSection).template  = "adbyby/adbyby_status"
 
